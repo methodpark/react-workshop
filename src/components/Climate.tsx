@@ -3,23 +3,63 @@ import { Sensor } from '../lib/Sensor';
 
 import Header from './Header';
 import Footer from './Footer';
+import Value from './Value';
 
 type ClimateProps = { sensor: Sensor };
-type ClimateState = { temperature: number | null, humidity: number | null };
+
+export type ClimateTuple = {
+  min: number,
+  current: number,
+  max: number,
+}
+
+type ClimateState = {
+  temperature: ClimateTuple,
+  humidity: ClimateTuple,
+};
+
+function updateTuple(currentValue: number, given?: ClimateTuple): ClimateTuple {
+  const res = {
+    min: Math.min(given?.min || Infinity, currentValue),
+    current: currentValue,
+    max: Math.max(given?.max || -Infinity, currentValue)
+  }
+
+  return res;
+}
 
 class Climate extends Component<ClimateProps, ClimateState> {
   state: ClimateState = {
-    temperature: null,
-    humidity: null,
+    temperature: updateTuple(20),
+    humidity: updateTuple(50)
   };
 
   componentDidMount() {
-    this.props.sensor.on('temperature', temperature => this.setState({ temperature }));
-    this.props.sensor.on('humidity', humidity => this.setState({ humidity }));
+    this.props.sensor.on('temperature', temperature => this.updateTemperature(temperature));
+    this.props.sensor.on('humidity', humidity => this.updateHumidity(humidity));
   }
 
   componentWillUnmount() {
     this.props.sensor.clearListeners();
+  }
+
+  updateTemperature(temperature: number) {
+    this.setState({
+      temperature: updateTuple(temperature, this.state.temperature)
+    });
+  }
+
+  updateHumidity(humidity: number) {
+    this.setState({
+      humidity: updateTuple(humidity, this.state.humidity)
+    });
+  }
+
+  reset() {
+    this.setState({
+      temperature: updateTuple(20),
+      humidity: updateTuple(50),
+    });
   }
 
   render() {
@@ -27,13 +67,10 @@ class Climate extends Component<ClimateProps, ClimateState> {
       <div>
         <Header />
 
-        <div id="temperature">
-          Temperature: {this.state.temperature ?? '-'}
-        </div>
+        <Value data={this.state.temperature} title="temperature" />
+        <Value data={this.state.humidity} title="humidity" />
 
-        <div id="humidity">
-          Humidity: {this.state.humidity ?? '-'}
-        </div>
+        <button onClick={() => this.reset()}>Reset</button>
 
         <Footer />
       </div>
