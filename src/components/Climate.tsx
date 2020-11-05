@@ -1,6 +1,9 @@
 import React, { Component } from 'react'
 import { Sensor } from '../lib/Sensor';
 
+import Header from './Header';
+import Footer from './Footer';
+
 type ClimateProps = { sensor: Sensor };
 type ClimateState = { temperature: number | null, humidity: number | null };
 
@@ -22,6 +25,8 @@ class Climate extends Component<ClimateProps, ClimateState> {
   render() {
     return (
       <div>
+        <Header />
+
         <div id="temperature">
           Temperature: {this.state.temperature ?? '-'}
         </div>
@@ -29,6 +34,8 @@ class Climate extends Component<ClimateProps, ClimateState> {
         <div id="humidity">
           Humidity: {this.state.humidity ?? '-'}
         </div>
+
+        <Footer />
       </div>
     );
   }
