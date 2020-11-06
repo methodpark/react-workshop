@@ -1,70 +1,31 @@
-import React, { Component } from 'react'
-import { Sensor } from '../lib/Sensor';
+import React from 'react'
+import { useSelector, useDispatch } from 'react-redux';
+
+import { climateSlice, selectHumidity, selectTemperature } from '../state/climate';
 
 import Header from './Header';
 import Footer from './Footer';
 import Value from './Value';
 
-import { ClimateState, ClimateTuple } from '../state/climate';
+const { reset } = climateSlice.actions
 
-type ClimateProps = { sensor: Sensor };
+function Climate() {
+  const dispatch = useDispatch();
+  const temperature = useSelector(selectTemperature);
+  const humidity = useSelector(selectHumidity);
 
-function updateTuple(currentValue: number, given?: ClimateTuple): ClimateTuple {
-  return {
-    min: Math.min(given?.min || Infinity, currentValue),
-    current: currentValue,
-    max: Math.max(given?.max || -Infinity, currentValue)
-  };
-}
+  return (
+    <div>
+      <Header />
 
-class Climate extends Component<ClimateProps, ClimateState> {
-  state: ClimateState = {
-    temperature: updateTuple(20),
-    humidity: updateTuple(50)
-  };
+      <Value data={temperature} title="temperature" />
+      <Value data={humidity} title="humidity" />
 
-  componentDidMount() {
-    this.props.sensor.on('temperature', temperature => this.updateTemperature(temperature));
-    this.props.sensor.on('humidity', humidity => this.updateHumidity(humidity));
-  }
+      <button onClick={() => dispatch(reset())}>Reset</button>
 
-  componentWillUnmount() {
-    this.props.sensor.clearListeners();
-  }
-
-  updateTemperature(temperature: number) {
-    this.setState({
-      temperature: updateTuple(temperature, this.state.temperature)
-    });
-  }
-
-  updateHumidity(humidity: number) {
-    this.setState({
-      humidity: updateTuple(humidity, this.state.humidity)
-    });
-  }
-
-  reset() {
-    this.setState({
-      temperature: updateTuple(20),
-      humidity: updateTuple(50),
-    });
-  }
-
-  render() {
-    return (
-      <div>
-        <Header />
-
-        <Value data={this.state.temperature} title="temperature" />
-        <Value data={this.state.humidity} title="humidity" />
-
-        <button onClick={() => this.reset()}>Reset</button>
-
-        <Footer />
-      </div>
-    );
-  }
+      <Footer />
+    </div>
+  );
 }
 
 export default Climate;

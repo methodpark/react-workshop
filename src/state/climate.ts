@@ -43,3 +43,6 @@ export const climateSlice = createSlice({
         reset,
     }
 });
+
+export const selectTemperature = (state: ClimateState) => state.temperature;
+export const selectHumidity = (state: ClimateState) => state.humidity;
