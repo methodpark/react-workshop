@@ -7,14 +7,13 @@ import { sensor } from './lib/Sensor';
 import Climate from './components/Climate';
 
 import { climateSlice } from './state/climate';
+import rootReducer from './state/state';
 
 import './index.css';
 
 const { setTemperature, setHumidity } = climateSlice.actions;
 
-const store = configureStore({
-    reducer: climateSlice.reducer
-});
+const store = configureStore({ reducer: rootReducer });
 
 sensor.on('temperature', temperature => store.dispatch(setTemperature(temperature)));
 sensor.on('humidity', humidity => store.dispatch(setHumidity(humidity)));

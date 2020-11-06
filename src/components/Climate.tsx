@@ -1,16 +1,15 @@
 import React from 'react'
-import { useSelector, useDispatch } from 'react-redux';
+import { useSelector } from 'react-redux';
 
-import { climateSlice, selectHumidity, selectTemperature } from '../state/climate';
+import { selectHumidity, selectTemperature } from '../state/climate';
 
 import Header from './Header';
 import Footer from './Footer';
 import Value from './Value';
-
-const { reset } = climateSlice.actions
+import LoadButton from './LoadButton';
+import ResetButton from './ResetButton';
 
 function Climate() {
-  const dispatch = useDispatch();
   const temperature = useSelector(selectTemperature);
   const humidity = useSelector(selectHumidity);
 
@@ -21,7 +20,9 @@ function Climate() {
       <Value data={temperature} title="temperature" />
       <Value data={humidity} title="humidity" />
 
-      <button onClick={() => dispatch(reset())}>Reset</button>
+      <hr />
+
+      <ResetButton /> <LoadButton />
 
       <Footer />
     </div>

@@ -1,5 +1,7 @@
 import { createSlice, CaseReducer, PayloadAction } from '@reduxjs/toolkit';
 
+import { AppState } from './state'
+
 export type ClimateTuple = {
     min: number,
     current: number,
@@ -44,5 +46,5 @@ export const climateSlice = createSlice({
     }
 });
 
-export const selectTemperature = (state: ClimateState) => state.temperature;
-export const selectHumidity = (state: ClimateState) => state.humidity;
+export const selectTemperature = (state: AppState) => state.climate.temperature;
+export const selectHumidity = (state: AppState) => state.climate.humidity;
