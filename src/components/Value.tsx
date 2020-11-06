@@ -1,6 +1,6 @@
 import React from 'react'
 
-import { ClimateTuple } from './Climate'
+import { ClimateTuple } from '../state/climate';
 
 type ValueProps = {
     title: string,

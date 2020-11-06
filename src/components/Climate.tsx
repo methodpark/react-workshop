@@ -5,27 +5,16 @@ import Header from './Header';
 import Footer from './Footer';
 import Value from './Value';
 
+import { ClimateState, ClimateTuple } from '../state/climate';
+
 type ClimateProps = { sensor: Sensor };
 
-export type ClimateTuple = {
-  min: number,
-  current: number,
-  max: number,
-}
-
-type ClimateState = {
-  temperature: ClimateTuple,
-  humidity: ClimateTuple,
-};
-
 function updateTuple(currentValue: number, given?: ClimateTuple): ClimateTuple {
-  const res = {
+  return {
     min: Math.min(given?.min || Infinity, currentValue),
     current: currentValue,
     max: Math.max(given?.max || -Infinity, currentValue)
-  }
-
-  return res;
+  };
 }
 
 class Climate extends Component<ClimateProps, ClimateState> {
