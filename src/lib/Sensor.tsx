@@ -9,10 +9,10 @@ export class Sensor extends Emittery.Typed<{ [EVENT_NAME_TEMP]: number, [EVENT_N
   private humidity: number = 50;
   private temperature: number = 20;
 
-  constructor(startEmittingValues = true) {
+  constructor(underTest = false) {
     super();
 
-    if (startEmittingValues) {
+    if (!underTest) {
       this._humidityTick();
       this._temperatureTick();
     }

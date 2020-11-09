@@ -1,34 +1,27 @@
-import { render } from '@testing-library/react';
 import React from 'react'
 
-import { testSensor } from '../lib/Sensor';
+import { Sensor } from '../lib/Sensor';
+import { render, screen, waitFor } from '@testing-library/react'
+import '@testing-library/jest-dom/extend-expect'
 
 import Climate from './Climate';
+import wait from '../lib/wait';
 
-test('Climate app shows the current temperature (example usage of test sensor)', async () => {
-    // It's important to use `testSensor` for the tests, instead of the "real"
-    // sensor used in the app. There are two reasons for this:
-    // 1. Performance: the real sensor emits data after delayed timeouts,
-    //    which would slow down our tests.
-    // 2. Predictability: the real sensor generates random values, which is
-    //    almost impossible to test. We need to control the emitted values.
-    const { findByText } = render(<Climate sensor={testSensor} />);
+test('loads and displays greeting', async () => {
+    const sensor = new Sensor(true);
+    render(<Climate sensor={sensor} />)
 
-    // No value from the sensor yet, so "-" is shown.
-    expect(await findByText(/temperature:/i)).toHaveTextContent('-');
+    sensor.emit('temperature', 11.111);
+    sensor.emit('temperature', 33.333);
+    sensor.emit('temperature', 22.222);
 
-    // We let the sensor emit a temperature value of 21:
-    testSensor.emit('temperature', 21);
+    sensor.emit('humidity', 44.444);
+    sensor.emit('humidity', 66.666);
+    sensor.emit('humidity', 55.555);
 
-    // Let's check if that 21 is actually rendered.
-    // We need to use `findBy…` and `await` that, because the event loop needs
-    // to run first, so that our emitted event from above actually reaches the
-    // component.
-    expect(await findByText(/temperature:/i)).toHaveTextContent('21');
+    // sensor emits asynchrounsly
+    await wait();
 
-    // Same thing again with a different temperature value, so that we can be
-    // sure that the shown values are always up to date with the latest emitted
-    // value from the sensor.
-    testSensor.emit('temperature', 22);
-    expect(await findByText(/temperature:/i)).toHaveTextContent('22');
+    expect(screen.getByTestId('value-temperature')).toHaveTextContent('temperaturemin: 11.11 22.22 max: 33.33');
+    expect(screen.getByTestId('value-humidity')).toHaveTextContent('humiditymin: 44.44 55.55 max: 66.67');
 });
