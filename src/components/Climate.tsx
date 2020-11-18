@@ -1,34 +1,24 @@
 import React, { Component } from 'react'
 import { Sensor } from '../lib/Sensor';
+import ClimateValue from './ClimateValue';
 
 type ClimateProps = { sensor: Sensor };
-type ClimateState = { temperature: number | null, humidity: number | null };
 
-class Climate extends Component<ClimateProps, ClimateState> {
-  state: ClimateState = {
-    temperature: null,
-    humidity: null,
-  };
-
-  componentDidMount() {
-    this.props.sensor.on('temperature', temperature => this.setState({ temperature }));
-    this.props.sensor.on('humidity', humidity => this.setState({ humidity }));
-  }
-
-  componentWillUnmount() {
-    this.props.sensor.clearListeners();
-  }
-
+class Climate extends Component<ClimateProps> {
   render() {
     return (
       <div>
-        <div id="temperature">
-          Temperature: {this.state.temperature ?? '-'}
-        </div>
+        <ClimateValue
+          title='Temperature'
+          event='temperature'
+          sensor={this.props.sensor}
+        />
 
-        <div id="humidity">
-          Humidity: {this.state.humidity ?? '-'}
-        </div>
+        <ClimateValue
+          title='Humidity'
+          event='humidity'
+          sensor={this.props.sensor}
+        />
       </div>
     );
   }
