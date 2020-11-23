@@ -1,4 +1,4 @@
-# Assignment 3: Testing React App
+# Assignment 3: Testing React Apps
 
 ## 3.1 Getting Started
 
