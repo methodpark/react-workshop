@@ -20,5 +20,5 @@ fully defined by the input.
 
 Focus on tests for the *reducer*, which takes in some state and an action, and
 produces a new state as result from that. Think of various scenarios that can
-occur in the app and write them down as test code, asserting the expected new
-state after some action happens with a given starting stating.
+occur in the app and document them as test code. Starting with some state,
+assert the state matches what you'd expect it after an action has been reduced.
