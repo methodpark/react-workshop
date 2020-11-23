@@ -26,4 +26,4 @@ Use *React Toolkit's* `configureStore` to set up the Redux store, and make it
 available to the React app via a `<Provider>`.
 
 After that, adapt your component(s) to use the Redux state handling. The *hooks*
-`useDispatch` and `useSelector` will help you with that.
+`useDispatch` and `useSelector` from the package `react-redux` will help you with that.
