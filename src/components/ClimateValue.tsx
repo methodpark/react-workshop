@@ -16,19 +16,19 @@ class ClimateValue extends Component<ClimateValueProps, ClimateValueState> {
     max: -Infinity,
   };
 
+  update = (value: number) => {
+    const rounded = Math.round(value);
+    this.setState({ current: rounded });
+    if (rounded > this.state.max) { this.setState({ max: rounded }) };
+    if (rounded < this.state.min) { this.setState({ min: rounded }) };
+  }
+
   componentDidMount() {
-    this.props.sensor.on(this.props.event,
-        value => {
-          const rounded = Math.round(value);
-          this.setState({ current: rounded });
-          if (rounded > this.state.max) { this.setState({ max: rounded }) };
-          if (rounded < this.state.min) { this.setState({ min: rounded }) };
-        }
-    );
+    this.props.sensor.on(this.props.event, this.update);
   }
 
   componentWillUnmount() {
-    this.props.sensor.clearListeners();
+    this.props.sensor.off(this.props.event, this.update);
   }
 
   render() {
