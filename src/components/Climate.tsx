@@ -1,27 +1,25 @@
-import React, { Component } from 'react'
+import React from 'react'
 import { Sensor } from '../lib/Sensor';
 import ClimateValue from './ClimateValue';
 
 type ClimateProps = { sensor: Sensor };
 
-class Climate extends Component<ClimateProps> {
-  render() {
-    return (
-      <div>
-        <ClimateValue
-          title='Temperature'
-          event='temperature'
-          sensor={this.props.sensor}
-        />
+function Climate({ sensor }: ClimateProps) {
+  return (
+    <>
+      <ClimateValue
+        title='Temperature'
+        event='temperature'
+        sensor={sensor}
+      />
 
-        <ClimateValue
-          title='Humidity'
-          event='humidity'
-          sensor={this.props.sensor}
-        />
-      </div>
-    );
-  }
+      <ClimateValue
+        title='Humidity'
+        event='humidity'
+        sensor={sensor}
+      />
+    </>
+  );
 }
 
 export default Climate;
