@@ -3,13 +3,14 @@ import { Sensor, SensorEvent } from "../lib/Sensor";
 
 interface ClimateValueProps {
   title : string;
+  unit  : string;
   sensor: Sensor;
   event : SensorEvent;
 };
 
 type ClimateValueState = { current: number, min: number, max: number };
 
-function ClimateValue({title, sensor, event}: ClimateValueProps) {
+function ClimateValue({title, unit, sensor, event}: ClimateValueProps) {
   const [state, setState] = useState<ClimateValueState>({
     current: NaN, min: Infinity, max: -Infinity
   });
@@ -36,7 +37,7 @@ function ClimateValue({title, sensor, event}: ClimateValueProps) {
   }, [sensor, event, update]);
 
   const printNumber = (value: number) =>
-    Number.isFinite(value) ? value.toString() : '-';
+    Number.isFinite(value) ? `${value}${unit}` : '-';
 
   return (
     <div>

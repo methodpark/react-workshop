@@ -28,12 +28,14 @@ function Climate({ sensor }: ClimateProps) {
 
       {visible && <ClimateValue
         title='Temperature'
+        unit='° C'
         event='temperature'
         sensor={sensor}
       />}
 
       {visible && <ClimateValue
         title='Humidity'
+        unit='%'
         event='humidity'
         sensor={sensor}
       />}
