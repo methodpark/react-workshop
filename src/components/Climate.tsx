@@ -1,37 +1,42 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Sensor } from '../lib/Sensor';
 import ClimateValue from './ClimateValue';
 
 type ClimateProps = { sensor: Sensor };
 
 function Climate({ sensor }: ClimateProps) {
+  const [visible, setVisible] = useState(true);
+
   useEffect(() => {
-    // runs at creation and on each update, but that's fine (see below)
+    // runs on creation and when a new sensor is passed (see below)
     console.log('registering even listeners in <Climate>');
     sensor.on('temperature', t => console.log(`temperature: ${t}`));
     sensor.on('humidity',    h => console.log(`humidity:    ${h}`));
 
-    // this runs when the component is unmounted
+    // runs when the component is unmounted
     return () => {
       console.log('clearing ALL event listeners (<Climate>)');
       sensor.clearListeners();
     }
-  }); // no deps array; then only thing that could change here is the sensor
-      // prop, and if that changes, we actually do want to unsub + sub again
+  }, [sensor]); // only run this when sensor changes
 
   return (
     <>
-      <ClimateValue
+      <button onClick={() => setVisible(!visible)}>
+        Show/Hide (mounts/unmounts {'<ClimateValue>'} instances)
+      </button>
+
+      {visible && <ClimateValue
         title='Temperature'
         event='temperature'
         sensor={sensor}
-      />
+      />}
 
-      <ClimateValue
+      {visible && <ClimateValue
         title='Humidity'
         event='humidity'
         sensor={sensor}
-      />
+      />}
     </>
   );
 }
