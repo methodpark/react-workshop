@@ -59,7 +59,7 @@ When it works, add a similar test for the current humidity value.
 
 ### Hints
 
-You have introduced a child component in assignment 3.2 and are using that in
+You have introduced a child component in assignment 2.1 and are using that in
 your `Climate` component. We are still just writing tests on the level of the
 `Climate` component and not on the child component though. That is not a unit
 test, but an integration test, and it's the approach we want to use here.
