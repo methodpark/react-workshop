@@ -1,51 +1,49 @@
-import React, { Component } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { Sensor, SensorEvent } from "../lib/Sensor";
 
 interface ClimateValueProps {
-  event: SensorEvent;
-  title: string;
+  title : string;
   sensor: Sensor;
+  event : SensorEvent;
 };
 
 type ClimateValueState = { current: number, min: number, max: number };
 
-class ClimateValue extends Component<ClimateValueProps, ClimateValueState> {
-  state: ClimateValueState = {
+function ClimateValue({title, sensor, event}: ClimateValueProps) {
+  const [state, setState] = useState<ClimateValueState>({
     current: NaN,
     min: Infinity,
     max: -Infinity,
-  };
+  });
 
-  update = (value: number) => {
-    const rounded = Math.round(value);
-    this.setState({ current: rounded });
-    if (rounded > this.state.max) { this.setState({ max: rounded }) };
-    if (rounded < this.state.min) { this.setState({ min: rounded }) };
-  }
+  const update = useCallback(
+    (value: number) => {
+      const rounded = Math.round(value * 10) / 10;
+      setState({
+        current: rounded,
+        min: (rounded < state.min) ? rounded : state.min,
+        max: (rounded > state.max) ? rounded : state.max,
+      });
+  }, [state.min, state.max]);
 
-  componentDidMount() {
-    this.props.sensor.on(this.props.event, this.update);
-  }
+  useEffect(() => {
+    sensor.on(event, update);
+    return () => sensor.off(event, update);
+  }, [sensor, event, update]);
 
-  componentWillUnmount() {
-    this.props.sensor.off(this.props.event, this.update);
-  }
+  const hideInfinities = (value: number) =>
+    Number.isFinite(value) ? value.toString() : '-';
 
-  render() {
-    const safeValue = (value: number) =>
-      Number.isFinite(value) ? value.toString() : '-';
-
-    return (
-      <div>
-        <h2>{this.props.title}</h2>
-        <ul>
-          <li>Current: {safeValue(this.state.current)}</li>
-          <li>Min: {safeValue(this.state.min)}</li>
-          <li>Max: {safeValue(this.state.max)}</li>
-        </ul>
-      </div>
-    );
-  }
+  return (
+    <div>
+      <h2>{title}</h2>
+      <ul>
+        <li>Current: {hideInfinities(state.current)}</li>
+        <li>Min:     {hideInfinities(state.min)    }</li>
+        <li>Max:     {hideInfinities(state.max)    }</li>
+      </ul>
+    </div>
+  );
 }
 
 export default ClimateValue;
