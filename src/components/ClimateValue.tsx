@@ -26,8 +26,8 @@ function ClimateValue({title, unit, sensor, event}: ClimateValueProps) {
       const rounded = Math.round(value * 10) / 10;
       setState({
         current: rounded,
-        min: (rounded < state.min) ? rounded : state.min,
-        max: (rounded > state.max) ? rounded : state.max,
+        min: Math.min(rounded, state.min),
+        max: Math.max(rounded, state.max),
       });
   }, [state.min, state.max]);
 
