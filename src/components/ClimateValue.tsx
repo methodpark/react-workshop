@@ -43,9 +43,9 @@ function ClimateValue({title, unit, sensor, event}: ClimateValueProps) {
     <div>
       <h2>{title}</h2>
       <ul>
-        <li>Current: {printNumber(state.current)}</li>
-        <li>Min:     {printNumber(state.min)    }</li>
-        <li>Max:     {printNumber(state.max)    }</li>
+        <li data-testid={`${event}-cur`}>Current: {printNumber(state.current)}</li>
+        <li data-testid={`${event}-min`}>Min:     {printNumber(state.min)    }</li>
+        <li data-testid={`${event}-max`}>Max:     {printNumber(state.max)    }</li>
       </ul>
       <button onClick={reset}>
         Reset {title} Min/Max
