@@ -11,9 +11,13 @@ type ClimateValueState = { current: number, min: number, max: number };
 
 function ClimateValue({title, sensor, event}: ClimateValueProps) {
   const [state, setState] = useState<ClimateValueState>({
-    current: NaN,
-    min: Infinity,
-    max: -Infinity,
+    current: NaN, min: Infinity, max: -Infinity
+  });
+
+  const reset = () => setState({
+    current: state.current,
+    min    : state.current,
+    max    : state.current,
   });
 
   const update = useCallback(
@@ -31,17 +35,20 @@ function ClimateValue({title, sensor, event}: ClimateValueProps) {
     return () => sensor.off(event, update);
   }, [sensor, event, update]);
 
-  const hideInfinities = (value: number) =>
+  const printNumber = (value: number) =>
     Number.isFinite(value) ? value.toString() : '-';
 
   return (
     <div>
       <h2>{title}</h2>
       <ul>
-        <li>Current: {hideInfinities(state.current)}</li>
-        <li>Min:     {hideInfinities(state.min)    }</li>
-        <li>Max:     {hideInfinities(state.max)    }</li>
+        <li>Current: {printNumber(state.current)}</li>
+        <li>Min:     {printNumber(state.min)    }</li>
+        <li>Max:     {printNumber(state.max)    }</li>
       </ul>
+      <button onClick={reset}>
+        Reset {title} Min/Max
+      </button>
     </div>
   );
 }
