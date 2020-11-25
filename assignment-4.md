@@ -22,3 +22,6 @@ Focus on tests for the *reducer*, which takes in some state and an action, and
 produces a new state as result from that. Think of various scenarios that can
 occur in the app and document them as test code. Starting with some state,
 assert the state matches what you'd expect it after an action has been reduced.
+
+**You're not supposed to integrate this state management solution into your
+current React application (yet)!**
