@@ -55,3 +55,62 @@ You can than import this type, and define a *thunk* function like this:
 ```typescript
 export function createSomeCoolThunk(): AppThunk { /* … */ }
 ```
+
+## Setup Hints
+
+### Climate Slice
+
+```typescript
+export type ClimateTuple = {
+    min: number,
+    current: number,
+    max: number,
+}
+
+export type ClimateState = {
+    temperature: ClimateTuple,
+    humidity: ClimateTuple,
+}
+
+// ...
+
+export const selectTemperature = (state: AppState) => state.climate.temperature;
+```
+
+### "Retrieval State" Slice
+
+```typescript
+export enum stateType {
+    default,
+    loading,
+    error,
+}
+
+export type RetrievalState = {
+    state: stateType,
+    errorMessage?: string,
+}
+
+// ...
+
+export const selectState = (state: AppState) => state.retrieval.state
+```
+
+### Global State
+
+```typescript
+import { combineReducers } from '@reduxjs/toolkit'
+
+import { climateSlice, ClimateState } from './climate'
+import { retrievalSlice, RetrievalState } from './retrieval'
+
+export type AppState = {
+    climate: ClimateState,
+    retrieval: RetrievalState,
+}
+
+export default combineReducers<AppState>({
+    climate: climateSlice.reducer,
+    retrieval: retrievalSlice.reducer,
+})
+```
