@@ -58,9 +58,40 @@ export function createSomeCoolThunk(): AppThunk { /* … */ }
 
 ## Setup Hints
 
-### Climate Slice
+**If** you decided that the metadata about the retrieval state should go into its own slice, you need to combine the state output of those reducers.
+
+You are *not* required to split your slices, this is just meant as a hint for the case you are doing it.
+
+### Global State
+
+Combine Reducers via `combineReducers`,
 
 ```typescript
+import { combineReducers } from '@reduxjs/toolkit'
+
+import { climateSlice, ClimateState } from './climate'
+import { retrievalSlice, RetrievalState } from './retrieval'
+
+// definition of the new application state that shares the data of all slices
+export type AppState = {
+    climate: ClimateState,
+    retrieval: RetrievalState,
+}
+
+// combined reducers
+export default combineReducers<AppState>({
+    climate: climateSlice.reducer,
+    retrieval: retrievalSlice.reducer,
+})
+```
+
+### Climate Slice
+
+Make sure to use `AppState` in your selectors, because this is the state you're using now!
+
+```typescript
+import { AppState } from './globalState';
+
 export type ClimateTuple = {
     min: number,
     current: number,
@@ -79,7 +110,11 @@ export const selectTemperature = (state: AppState) => state.climate.temperature;
 
 ### "Retrieval State" Slice
 
+Make sure to use `AppState` in your selectors, because this is the state you're using now!
+
 ```typescript
+import { AppState } from './globalState';
+
 export enum stateType {
     default,
     loading,
@@ -94,23 +129,4 @@ export type RetrievalState = {
 // ...
 
 export const selectState = (state: AppState) => state.retrieval.state
-```
-
-### Global State
-
-```typescript
-import { combineReducers } from '@reduxjs/toolkit'
-
-import { climateSlice, ClimateState } from './climate'
-import { retrievalSlice, RetrievalState } from './retrieval'
-
-export type AppState = {
-    climate: ClimateState,
-    retrieval: RetrievalState,
-}
-
-export default combineReducers<AppState>({
-    climate: climateSlice.reducer,
-    retrieval: retrievalSlice.reducer,
-})
 ```
