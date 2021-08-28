@@ -26,26 +26,43 @@ function Value({ id, title, value, unit }: ValueProps) {
     }
 
     return (
-        <div id={id}>
+        <div>
             <h2>{title}</h2>
             <ul>
-                <ListEntry title="Current" unit={unit} value={value}></ListEntry>
-                <ListEntry title="Minimum" unit={unit} value={minimum}></ListEntry>
-                <ListEntry title="Maximum" unit={unit} value={maximum}></ListEntry>
+                <ListEntry
+                    id={id}
+                    title="Current"
+                    unit={unit}
+                    value={value}
+                ></ListEntry>
+                <ListEntry
+                    id={id}
+                    title="Minimum"
+                    unit={unit}
+                    value={minimum}
+                ></ListEntry>
+                <ListEntry
+                    id={id}
+                    title="Maximum"
+                    unit={unit}
+                    value={maximum}
+                ></ListEntry>
             </ul>
             <button onClick={reset}>Reset</button>
         </div>
     );
 }
 
-type ListEntryProps = Omit<ValueProps, 'id'>;
-
-function ListEntry({ title, value, unit }: ListEntryProps) {
+function ListEntry({ id, title, value, unit }: ValueProps) {
     const formattedValue = value
         ? `${Math.round(value * 10) / 10}${unit}`
         : '-';
 
-    return <li><strong>{title}:</strong> {formattedValue}</li>;
+    return (
+        <li data-testid={`${id}-${title.toLowerCase()}`}>
+            <strong>{title}:</strong> {formattedValue}
+        </li>
+    );
 }
 
 export default Value;

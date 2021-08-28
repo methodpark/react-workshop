@@ -5,31 +5,33 @@ import { testSensor } from '../lib/Sensor';
 import Climate from './Climate';
 
 describe('Climate component', () => {
-    it.skip('shows the current temperature', async () => {
-        // It's important to use `testSensor` for the tests, instead of the "real"
-        // sensor used in the app. There are two reasons for this:
-        // 1. Performance: the real sensor emits data after delayed timeouts,
-        //    which would slow down our tests.
-        // 2. Predictability: the real sensor generates random values, which is
-        //    almost impossible to test. We need to control the emitted values.
-        const { findByText } = render(<Climate sensor={testSensor} />);
+    describe('Temperature', () => {
+        it('shows the current value', async () => {
+            const { findByTestId } = render(<Climate sensor={testSensor} />);
+            const findCurrent = () => findByTestId('temperature-current');
 
-        // No value from the sensor yet, so "-" is shown.
-        expect(await findByText(/temperature:/i)).to.contain.text('-');
+            expect(await findCurrent()).to.contain.text('-');
 
-        // We let the sensor emit a temperature value of 21:
-        testSensor.emit('temperature', 21);
+            testSensor.emit('temperature', 21);
+            expect(await findCurrent()).to.contain.text('21° C');
 
-        // Let's check if that 21 is actually rendered.
-        // We need to use `findBy…` and `await` that, because the event loop needs
-        // to run first, so that our emitted event from above actually reaches the
-        // component.
-        expect(await findByText(/temperature:/i)).to.contain.text('21');
+            testSensor.emit('temperature', 22.666);
+            expect(await findCurrent()).to.contain.text('22.7° C');
+        });
+    });
 
-        // Same thing again with a different temperature value, so that we can be
-        // sure that the shown values are always up to date with the latest emitted
-        // value from the sensor.
-        testSensor.emit('temperature', 22);
-        expect(await findByText(/temperature:/i)).to.contain.text('22');
+    describe('Humidity', () => {
+        it('shows the current value', async () => {
+            const { findByTestId } = render(<Climate sensor={testSensor} />);
+            const findCurrent = () => findByTestId('humidity-current');
+
+            expect(await findCurrent()).to.contain.text('-');
+
+            testSensor.emit('humidity', 60);
+            expect(await findCurrent()).to.contain.text('60 %');
+
+            testSensor.emit('humidity', 65.1111);
+            expect(await findCurrent()).to.contain.text('65.1 %');
+        });
     });
 });
