@@ -19,6 +19,11 @@ function Value({ id, title, value }: ValueProps) {
         }
     }
 
+    function reset() {
+        setMinimum(value);
+        setMaximum(value);
+    }
+
     return (
         <div id={id}>
             <h2>{title}</h2>
@@ -27,6 +32,7 @@ function Value({ id, title, value }: ValueProps) {
                 <li>Minimum: {minimum ?? '-'}</li>
                 <li>Maximum: {maximum ?? '-'}</li>
             </ul>
+            <button onClick={reset}>Reset</button>
         </div>
     );
 }
