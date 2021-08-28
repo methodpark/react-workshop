@@ -26,7 +26,7 @@ function Value({ id, title, value, unit }: ValueProps) {
     }
 
     return (
-        <div>
+        <div data-testid={id}>
             <h2>{title}</h2>
             <ul>
                 <ListEntry
