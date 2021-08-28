@@ -1,4 +1,29 @@
 body {
+  margin: 0;
   font-family: sans-serif;
   font-size: larger;
+}
+
+#root {
+  display: grid;
+  height: 100vh;
+  grid-template-rows: auto 1fr auto;
+
+}
+
+#root > * {
+  padding: 2rem;
+}
+
+header {
+  background: lightpink;
+}
+
+main {
+  background: coral;
+}
+
+footer {
+  background: wheat;
+  text-align: center;
 }
