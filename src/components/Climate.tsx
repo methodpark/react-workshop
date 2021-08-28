@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Sensor } from '../lib/Sensor';
+import Value from './Value';
 
 type ClimateProps = { sensor: Sensor };
 
@@ -16,13 +17,17 @@ function Climate({ sensor }: ClimateProps) {
 
   return (
     <div>
-      <div>
-        Temperature: {temperature ?? '-'}
-      </div>
+      <Value
+        id="temperature"
+        title="Temperature"
+        value={temperature}
+      ></Value>
 
-      <div>
-        Humidity: {humidity ?? '-'}
-      </div>
+      <Value
+        id="humidity"
+        title="Humidity"
+        value={humidity}
+      ></Value>
     </div>
   );
 }
