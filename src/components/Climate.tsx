@@ -21,12 +21,14 @@ function Climate({ sensor }: ClimateProps) {
         id="temperature"
         title="Temperature"
         value={temperature}
+        unit="° C"
       ></Value>
 
       <Value
         id="humidity"
         title="Humidity"
         value={humidity}
+        unit=" %"
       ></Value>
     </div>
   );

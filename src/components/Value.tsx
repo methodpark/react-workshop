@@ -4,9 +4,10 @@ interface ValueProps {
     id: string;
     title: string;
     value: number | null;
+    unit: string;
 }
 
-function Value({ id, title, value }: ValueProps) {
+function Value({ id, title, value, unit }: ValueProps) {
     const [minimum, setMinimum] = useState<number | null>(null);
     const [maximum, setMaximum] = useState<number | null>(null);
 
@@ -28,13 +29,23 @@ function Value({ id, title, value }: ValueProps) {
         <div id={id}>
             <h2>{title}</h2>
             <ul>
-                <li>Current: {value ?? '-'}</li>
-                <li>Minimum: {minimum ?? '-'}</li>
-                <li>Maximum: {maximum ?? '-'}</li>
+                <ListEntry title="Current" unit={unit} value={value}></ListEntry>
+                <ListEntry title="Minimum" unit={unit} value={minimum}></ListEntry>
+                <ListEntry title="Maximum" unit={unit} value={maximum}></ListEntry>
             </ul>
             <button onClick={reset}>Reset</button>
         </div>
     );
+}
+
+type ListEntryProps = Omit<ValueProps, 'id'>;
+
+function ListEntry({ title, value, unit }: ListEntryProps) {
+    const formattedValue = value
+        ? `${Math.round(value * 10) / 10}${unit}`
+        : '-';
+
+    return <li><strong>{title}:</strong> {formattedValue}</li>;
 }
 
 export default Value;
