@@ -6,11 +6,14 @@ import userEvent from '@testing-library/user-event';
 import { testSensor } from '../lib/Sensor';
 import { createStore } from '../redux/store';
 import Climate from './Climate';
+import ConnectSensor from './ConnectSensor';
 
 describe('Climate component', () => {
     const renderWithStore = () => render(
         <Provider store={createStore()}>
-            <Climate sensor={testSensor} />
+            <ConnectSensor sensor={testSensor}>
+                <Climate/>
+            </ConnectSensor>
         </Provider>);
 
     describe('Temperature', () => {

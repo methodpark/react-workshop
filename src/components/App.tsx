@@ -3,8 +3,10 @@ import { Provider } from 'react-redux';
 import { sensor } from '../lib/Sensor';
 import { store } from '../redux/store';
 import Climate from './Climate';
+import ConnectSensor from './ConnectSensor';
 import Footer from './Footer';
 import Header from './Header';
+import Quality from './Quality';
 
 function App() {
     return (
@@ -14,7 +16,10 @@ function App() {
             </header>
             <main>
                 <Provider store={store}>
-                    <Climate sensor={sensor}></Climate>
+                    <ConnectSensor sensor={sensor}>
+                        <Climate/>
+                        <Quality/>
+                    </ConnectSensor>
                 </Provider>
             </main>
             <footer>
