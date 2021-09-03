@@ -1,5 +1,5 @@
-import { resetHumidity, resetTemperature, selectHumidity, selectTemperature, updateHumidity, updateTemperature } from './climateSlice';
-import { createStore, RootState } from './store';
+import { createInitialClimateState, resetHumidity, resetTemperature, selectHumidity, selectTemperature, updateHumidity, updateTemperature } from './climateSlice';
+import { createStore } from './store';
 
 describe('Redux store', () => {
     let store: ReturnType<typeof createStore>;
@@ -12,11 +12,8 @@ describe('Redux store', () => {
     const getHumidity    = () => selectHumidity(store.getState());
 
     it('should have a defined initial state', () => {
-        const expectedState: RootState = {
-            climate: {
-                temperature: { current: null, minimum: null, maximum: null },
-                humidity:    { current: null, minimum: null, maximum: null }
-            }
+        const expectedState = {
+            climate: createInitialClimateState()
         };
 
         expect(store.getState()).to.deep.equal(expectedState);

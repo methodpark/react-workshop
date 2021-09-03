@@ -7,6 +7,7 @@ import ConnectSensor from './ConnectSensor';
 import Footer from './Footer';
 import Header from './Header';
 import Quality from './Quality';
+import ReloadButton from './ReloadButton';
 
 function App() {
     return (
@@ -20,6 +21,8 @@ function App() {
                         <Climate/>
                         <Quality/>
                     </ConnectSensor>
+                    <hr/>
+                    <ReloadButton/>
                 </Provider>
             </main>
             <footer>

@@ -36,3 +36,19 @@ button {
   border-color: darkgoldenrod;
   cursor: pointer;
 }
+
+hr {
+  border-style: solid;
+  opacity: 20%;
+  margin: 3rem;
+}
+
+.center {
+  text-align: center;
+}
+
+.error {
+  margin: 1rem;
+  color: darkred;
+  font-weight: bold;
+}
