@@ -1,28 +1,20 @@
-import React, { useState } from 'react';
+import React from 'react';
+import { useDispatch } from 'react-redux';
+import { CurMinMax, resetHumidity, resetTemperature } from '../redux/climateSlice';
 
 interface ValueProps {
     id: string;
     title: string;
-    value: number | null;
+    values: CurMinMax;
     unit: string;
 }
 
-function Value({ id, title, value, unit }: ValueProps) {
-    const [minimum, setMinimum] = useState<number | null>(null);
-    const [maximum, setMaximum] = useState<number | null>(null);
-
-    if (value !== null) {
-        if (minimum === null || value < minimum) {
-            setMinimum(value);
-        }
-        if (maximum === null || value > maximum) {
-            setMaximum(value);
-        }
-    }
+function Value({ id, title, values, unit }: ValueProps) {
+    const dispatch = useDispatch();
 
     function reset() {
-        setMinimum(value);
-        setMaximum(value);
+        dispatch(resetTemperature());
+        dispatch(resetHumidity());
     }
 
     return (
@@ -31,21 +23,21 @@ function Value({ id, title, value, unit }: ValueProps) {
             <ul>
                 <ListEntry
                     id={id}
-                    title="Current"
+                    name="Current"
                     unit={unit}
-                    value={value}
+                    value={values.current}
                 ></ListEntry>
                 <ListEntry
                     id={id}
-                    title="Minimum"
+                    name="Minimum"
                     unit={unit}
-                    value={minimum}
+                    value={values.minimum}
                 ></ListEntry>
                 <ListEntry
                     id={id}
-                    title="Maximum"
+                    name="Maximum"
                     unit={unit}
-                    value={maximum}
+                    value={values.maximum}
                 ></ListEntry>
             </ul>
             <button onClick={reset}>Reset</button>
@@ -53,14 +45,21 @@ function Value({ id, title, value, unit }: ValueProps) {
     );
 }
 
-function ListEntry({ id, title, value, unit }: ValueProps) {
+interface ListEntryProps {
+    id: string;
+    name: string;
+    value: number | null;
+    unit: string;
+}
+
+function ListEntry({ id, name, value, unit }: ListEntryProps) {
     const formattedValue = value
         ? `${Math.round(value * 10) / 10}${unit}`
         : '-';
 
     return (
-        <li data-testid={`${id}-${title.toLowerCase()}`}>
-            <strong>{title}:</strong> {formattedValue}
+        <li data-testid={`${id}-${name.toLowerCase()}`}>
+            <strong>{name}:</strong> {formattedValue}
         </li>
     );
 }

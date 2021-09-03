@@ -1,33 +1,37 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+
 import { Sensor } from '../lib/Sensor';
+import { selectHumidity, selectTemperature, updateHumidity, updateTemperature } from '../redux/climateSlice';
 import Value from './Value';
 
 type ClimateProps = { sensor: Sensor };
 
 function Climate({ sensor }: ClimateProps) {
-  const [temperature, setTemperature] = useState<number | null>(null);
-  const [humidity, setHumidity] = useState<number | null>(null);
+  const dispatch          = useDispatch();
+  const temperatureValues = useSelector(selectTemperature);
+  const humidityValues    = useSelector(selectHumidity);
 
   useEffect(() => {
-    sensor.on('temperature', setTemperature);
-    sensor.on('humidity', setHumidity);
+    sensor.on('temperature', value => dispatch(updateTemperature(value)));
+    sensor.on('humidity',    value => dispatch(updateHumidity(value)));
 
     return () => sensor.clearListeners();
-  }, [sensor]);
+  }, [sensor, dispatch]);
 
   return (
     <div>
       <Value
         id="temperature"
         title="Temperature"
-        value={temperature}
+        values={temperatureValues}
         unit="° C"
       ></Value>
 
       <Value
         id="humidity"
         title="Humidity"
-        value={humidity}
+        values={humidityValues}
         unit=" %"
       ></Value>
     </div>

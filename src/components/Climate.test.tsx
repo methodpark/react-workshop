@@ -1,11 +1,18 @@
 import React from 'react'
+import { Provider } from 'react-redux';
 import { getByRole, render } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 
 import { testSensor } from '../lib/Sensor';
+import { createStore } from '../redux/store';
 import Climate from './Climate';
 
 describe('Climate component', () => {
+    const renderWithStore = () => render(
+        <Provider store={createStore()}>
+            <Climate sensor={testSensor} />
+        </Provider>);
+
     describe('Temperature', () => {
         let findCurrent: () => Promise<HTMLElement>;
         let findMinimum: () => Promise<HTMLElement>;
@@ -13,8 +20,7 @@ describe('Climate component', () => {
         let getResetButton: () => HTMLElement;
 
         beforeEach(() => {
-            const { findByTestId, getByTestId } =
-                render(<Climate sensor={testSensor} />);
+            const { findByTestId, getByTestId } = renderWithStore();
 
             findCurrent = () => findByTestId('temperature-current');
             findMinimum = () => findByTestId('temperature-minimum');
@@ -83,7 +89,7 @@ describe('Climate component', () => {
 
     describe('Humidity', () => {
         it('shows the current value', async () => {
-            const { findByTestId } = render(<Climate sensor={testSensor} />);
+            const { findByTestId } = renderWithStore();
             const findCurrent = () => findByTestId('humidity-current');
 
             expect(await findCurrent()).to.contain.text('-');
